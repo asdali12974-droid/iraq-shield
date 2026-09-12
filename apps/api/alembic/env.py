@@ -17,7 +17,8 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-config.set_main_option("sqlalchemy.url", get_settings().alembic_dsn)
+dsn = get_settings().alembic_dsn.replace("%", "%%")
+config.set_main_option("sqlalchemy.url", dsn)
 
 target_metadata = Base.metadata
 
