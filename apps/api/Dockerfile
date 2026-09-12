@@ -1,4 +1,5 @@
 # syntax=docker/dockerfile:1
+
 FROM python:3.12-slim AS base
 
 ENV PYTHONUNBUFFERED=1 \
@@ -7,17 +8,15 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-# System deps: libpq for psycopg, curl for the container HEALTHCHECK.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
-COPY apps/api/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY apps/api/ .
+COPY . .
 
-# Run as a non-root user.
 RUN useradd -m -u 10001 appuser && chown -R appuser /app
 USER appuser
 
