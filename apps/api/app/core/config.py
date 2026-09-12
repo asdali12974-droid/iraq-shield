@@ -1,7 +1,7 @@
-"""Central configuration, loaded from environment variables only.
+﻿"""Central configuration, loaded from environment variables only.
 
 No secret has a usable default: the app refuses to start in a non-dev
-environment if security-critical values are left unset. This is deliberate —
+environment if security-critical values are left unset. This is deliberate â€”
 a foundation that boots with a hard-coded secret is not production-oriented.
 """
 from __future__ import annotations
@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     log_json: bool = True
     api_prefix: str = "/api/v1"
 
-    # CORS — explicit allowlist, never "*" in production.
+    # CORS â€” explicit allowlist, never "*" in production.
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])
 
     # --- PostgreSQL ---
@@ -100,7 +100,7 @@ class Settings(BaseSettings):
     raw_store_backend: Literal["filesystem", "minio"] = "filesystem"
     raw_store_fs_path: str = "/tmp/iraqshield-archive"
 
-    # --- Telegram (P1.3) — official MTProto access to PUBLIC channels only. ---
+    # --- Telegram (P1.3) â€” official MTProto access to PUBLIC channels only. ---
     # SECRETS: set via environment only, never committed or logged. `repr=False`
     # keeps them out of any settings repr/log line.
     telegram_api_id: int | None = Field(default=None, repr=False)
@@ -185,12 +185,18 @@ class Settings(BaseSettings):
         )
 
     def get_sqlalchemy_connect_args(self) -> dict:
-        """Return SQLAlchemy connect_args for SSL/TLS configuration."""
         _, _, _, _, _, use_ssl = self._parse_database_url()
-        if use_ssl:
-            return {"ssl": True}
-        return {}
 
+        if use_ssl:
+            import ssl
+
+            ssl_context = ssl.create_default_context()
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_NONE
+
+            return {"ssl": ssl_context}
+
+        return {}
     def assert_production_safety(self) -> None:
         """Fail loudly if unsafe defaults survive into a real deployment."""
         if self.environment != "production":
@@ -228,3 +234,4 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+
