@@ -19,52 +19,50 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
-    # Full-text search index for archive titles.
-    op.create_index(
-        "ix_archive_title_gin",
-        "raw_archive",
-        [op.text("to_tsvector('english', title)")],
-        postgresql_using="gin",
+    op.execute(
+        """
+        CREATE INDEX ix_archive_title_gin
+        ON raw_archive
+        USING gin (to_tsvector('english', title))
+        """
     )
 
-    # Full-text search index for extracted article text.
-    op.create_index(
-        "ix_archive_extracted_text_gin",
-        "raw_archive",
-        [
-            op.text(
-                "to_tsvector('english', COALESCE(extracted->>'text', ''))"
+    op.execute(
+        """
+        CREATE INDEX ix_archive_extracted_text_gin
+        ON raw_archive
+        USING gin (
+            to_tsvector(
+                'english',
+                COALESCE(extracted->>'text', '')
             )
-        ],
-        postgresql_using="gin",
+        )
+        """
     )
 
-    # Combined full-text search index for title + author.
-    op.create_index(
-        "ix_archive_title_author_gin",
-        "raw_archive",
-        [
-            op.text(
-                "to_tsvector('english', "
-                "COALESCE(title, '') || ' ' || COALESCE(author, ''))"
+    op.execute(
+        """
+        CREATE INDEX ix_archive_title_author_gin
+        ON raw_archive
+        USING gin (
+            to_tsvector(
+                'english',
+                COALESCE(title, '') || ' ' || COALESCE(author, '')
             )
-        ],
-        postgresql_using="gin",
+        )
+        """
     )
 
 
 def downgrade() -> None:
-    op.drop_index(
-        "ix_archive_title_author_gin",
-        table_name="raw_archive",
+    op.execute(
+        "DROP INDEX IF EXISTS ix_archive_title_author_gin"
     )
 
-    op.drop_index(
-        "ix_archive_extracted_text_gin",
-        table_name="raw_archive",
+    op.execute(
+        "DROP INDEX IF EXISTS ix_archive_extracted_text_gin"
     )
 
-    op.drop_index(
-        "ix_archive_title_gin",
-        table_name="raw_archive",
+    op.execute(
+        "DROP INDEX IF EXISTS ix_archive_title_gin"
     )
