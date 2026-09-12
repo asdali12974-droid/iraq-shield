@@ -1,0 +1,101 @@
+services:
+  - type: web
+    name: iraq-shield-api
+    env: docker
+
+    # Build configuration
+    dockerfilePath: ./apps/api/Dockerfile
+    # Render auto-detects Dockerfile and builds without additional buildCommand
+
+    # Runtime configuration
+    startCommand: ./entrypoint.sh serve
+
+    # Port and health checks
+    ports:
+      - port: 8000
+        protocol: HTTP
+
+    healthCheckPath: /health
+    healthCheckTimeout: 5
+    healthCheckInterval: 15
+
+    # Environment variables (non-secrets)
+    # Secrets like DATABASE_URL, JWT_SECRET, etc. must be added via Render dashboard
+    envVars:
+      - key: IS_ENVIRONMENT
+        value: production
+      - key: IS_DEBUG
+        value: "false"
+      - key: IS_LOG_LEVEL
+        value: INFO
+      - key: IS_LOG_JSON
+        value: "true"
+      - key: IS_API_PREFIX
+        value: /api/v1
+      - key: IS_CORS_ORIGINS
+        value: "[]"
+      - key: IS_POSTGRES_HOST
+        value: localhost
+      - key: IS_POSTGRES_PORT
+        value: "5432"
+      - key: IS_POSTGRES_DB
+        value: iraqshield
+      - key: IS_POSTGRES_USER
+        value: postgres
+      - key: IS_REDIS_HOST
+        value: localhost
+      - key: IS_REDIS_PORT
+        value: "6379"
+      - key: IS_MINIO_ENDPOINT
+        value: localhost:9000
+      - key: IS_MINIO_SECURE
+        value: "false"
+      - key: IS_MINIO_BUCKET_RAW
+        value: raw-archive
+      - key: IS_OPENSEARCH_HOST
+        value: localhost
+      - key: IS_OPENSEARCH_PORT
+        value: "9200"
+      - key: IS_NEO4J_URI
+        value: "bolt://localhost:7687"
+      - key: IS_NEO4J_USER
+        value: neo4j
+      - key: IS_BOOTSTRAP_ADMIN_NAME
+        value: "System Administrator"
+      - key: IS_COLLECTOR_ALLOW_PRIVATE_HOSTS
+        value: "false"
+      - key: IS_COLLECTOR_TIMEOUT_SECONDS
+        value: "20"
+      - key: IS_COLLECTOR_MAX_BYTES
+        value: "8000000"
+      - key: IS_COLLECTOR_MAX_REDIRECTS
+        value: "3"
+      - key: IS_COLLECTOR_MAX_RETRIES
+        value: "3"
+      - key: IS_COLLECTOR_RESPECT_ROBOTS
+        value: "true"
+      - key: IS_RAW_STORE_BACKEND
+        value: filesystem
+      - key: IS_RAW_STORE_FS_PATH
+        value: /tmp/iraqshield-archive
+
+    # Secrets (to be configured in Render dashboard)
+    # - DATABASE_URL (required - from Supabase)
+    # - IS_POSTGRES_PASSWORD (required if not using DATABASE_URL)
+    # - IS_JWT_SECRET (required - min 32 chars)
+    # - IS_REDIS_PASSWORD (if Redis auth enabled)
+    # - IS_MINIO_ACCESS_KEY (if MinIO enabled)
+    # - IS_MINIO_SECRET_KEY (if MinIO enabled)
+    # - IS_OPENSEARCH_PASSWORD (if OpenSearch auth enabled)
+    # - IS_NEO4J_PASSWORD (if Neo4j auth enabled)
+    # - IS_BOOTSTRAP_ADMIN_EMAIL (optional)
+    # - IS_BOOTSTRAP_ADMIN_PASSWORD (optional)
+    # - IS_TELEGRAM_API_ID (if Telegram integration enabled)
+    # - IS_TELEGRAM_API_HASH (if Telegram integration enabled)
+    # - IS_TELEGRAM_SESSION_STRING (if Telegram integration enabled)
+
+    # Resource allocation (free tier)
+    plan: free
+
+    # Auto-deploy on GitHub push
+    autoDeployOnPush: true

@@ -1,0 +1,42 @@
+# --- IRAQ SHIELD API runtime dependencies (pinned) ---
+# fastapi/starlette pinned to CVE-patched releases (pip-audit, 2026-08).
+fastapi==0.141.1
+starlette==1.6.0
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+python-multipart==0.0.32
+
+# Database
+SQLAlchemy==2.0.36
+asyncpg==0.30.0
+psycopg[binary]==3.2.3
+alembic==1.14.0
+
+# Security
+argon2-cffi==23.1.0
+PyJWT==2.13.0
+
+# Infrastructure clients
+redis==5.2.1
+minio==7.2.13
+opensearch-py==2.8.0
+neo4j==5.27.0
+
+# Collection (P1)
+feedparser==6.0.11
+celery==5.4.0
+# Web article extraction (P1.2) — generic, offline, no external services
+trafilatura==1.12.2
+selectolax==0.3.27
+charset-normalizer==3.4.0
+# Telegram public-channel collection (P1.3) — official MTProto client (Telethon).
+# Credentials come from env/secrets only; never committed. Lazily imported so the
+# app and its tests run without it when Telegram is not configured.
+telethon==1.44.0
+
+# Observability
+structlog==24.4.0
+
+# HTTP (health probes / internal)
+httpx==0.28.1

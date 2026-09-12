@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0b1118;
+  color: #e9e7df;
+  font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Arabic", Tahoma,
+    Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
