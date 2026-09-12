@@ -70,7 +70,14 @@ async def ensure_admin(db: AsyncSession) -> None:
         await db.execute(select(User).where(User.email == email))
     ).scalar_one_or_none()
     if found is not None:
-        log.info("bootstrap_admin_exists", email=email)
+        found.hashed_password = hash_password(s.bootstrap_admin_password)
+        found.full_name = s.bootstrap_admin_name
+        found.clearance_level = 5
+        found.is_active = True
+        found.roles = [(
+            await db.execute(select(Role).where(Role.name == "admin"))
+        ).scalar_one()]
+        log.info("bootstrap_admin_password_updated", email=email)
         return
     admin_role = (
         await db.execute(select(Role).where(Role.name == "admin"))
