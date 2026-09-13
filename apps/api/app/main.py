@@ -50,7 +50,7 @@ def create_app() -> FastAPI:
     app.add_middleware(RequestContextMiddleware)
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=s.cors_origins,
+        allow_origins=list(dict.fromkeys([*s.cors_origins, 'http://localhost:5173'])),
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -70,3 +70,4 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+
