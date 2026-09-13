@@ -51,7 +51,7 @@ class Settings(BaseSettings):
     redis_host: str = "localhost"
     redis_port: int = 6379
     redis_db: int = 0
-    redis_password: str | None = None
+    redis_password: str | None = Field(default=None, validation_alias="REDIS_PASSWORD")
 
     # --- MinIO / object storage ---
     minio_endpoint: str = "localhost:9000"
