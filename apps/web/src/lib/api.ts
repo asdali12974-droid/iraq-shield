@@ -1,7 +1,7 @@
 // Thin, typed client over the IRAQ SHIELD API. Every call hits the real
 // backend — there is no mock layer.
 
-const BASE = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000").replace(
+const BASE = (import.meta.env.VITE_API_BASE_URL ?? "https://iraq-shield-api-production.up.railway.app").replace(
   /\/$/,
   "",
 );
@@ -623,3 +623,5 @@ export async function getEntityRelationships(
     }),
   );
 }
+
+
