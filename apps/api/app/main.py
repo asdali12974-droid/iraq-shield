@@ -1,4 +1,4 @@
-"""IRAQ SHIELD API â€” application factory (P0 foundation)."""
+﻿"""IRAQ SHIELD API أ¢â‚¬â€‌ application factory (P0 foundation)."""
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
@@ -40,7 +40,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title=s.app_name,
         version="0.1.0",
-        description="OSINT & intelligence platform â€” P0 foundation (IAM, audit, health).",
+        description="OSINT & intelligence platform أ¢â‚¬â€‌ P0 foundation (IAM, audit, health).",
         lifespan=lifespan,
         docs_url="/docs",
         openapi_url="/openapi.json",
@@ -50,7 +50,7 @@ def create_app() -> FastAPI:
     app.add_middleware(RequestContextMiddleware)
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=list(dict.fromkeys([*s.cors_origins, 'http://localhost:5173'])),
+        allow_origins=list(dict.fromkeys([*s.cors_origins, 'http://localhost:5173', 'https://iraq-shield-web-production.up.railway.app'])),
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -70,6 +70,7 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+
 
 
 
