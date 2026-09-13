@@ -1,4 +1,4 @@
-"""IRAQ SHIELD API — application factory (P0 foundation)."""
+"""IRAQ SHIELD API â€” application factory (P0 foundation)."""
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
@@ -40,7 +40,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title=s.app_name,
         version="0.1.0",
-        description="OSINT & intelligence platform — P0 foundation (IAM, audit, health).",
+        description="OSINT & intelligence platform â€” P0 foundation (IAM, audit, health).",
         lifespan=lifespan,
         docs_url="/docs",
         openapi_url="/openapi.json",
@@ -70,5 +70,8 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+
+
+
 
 
